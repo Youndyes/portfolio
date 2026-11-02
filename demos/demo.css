@@ -1,0 +1,24 @@
+/* Barre commune à toutes les démos */
+:root { color-scheme: dark; }
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { margin: 0; height: 100%; background: #10131f; color: #f4f1e8; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; }
+.demo-bar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 48px; padding: 0 16px;
+  display: flex; align-items: center; gap: 16px;
+  background: #161a2b; border-bottom: 3px solid #0a0b14;
+  font-size: 14px; white-space: nowrap; overflow: hidden;
+}
+.demo-bar .back {
+  color: #17140a; background: #ffd23f; text-decoration: none; font-weight: 700;
+  padding: 6px 12px; border: 2px solid #0a0b14; box-shadow: 2px 2px 0 rgba(0,0,0,.4);
+}
+.demo-bar .title { font-weight: 700; overflow: hidden; text-overflow: ellipsis; }
+.demo-bar .note { color: #a9adc6; margin-left: auto; overflow: hidden; text-overflow: ellipsis; }
+.big { font-size: 20px; margin: 0 0 8px; }
+.muted { color: #a9adc6; margin: 0 0 16px; }
+.bar { width: 240px; height: 10px; margin: 0 auto; background: #20253c; border: 2px solid #0a0b14; overflow: hidden; }
+.bar span { display: block; height: 100%; width: 40%; background: #ffd23f; animation: slide 1.2s ease-in-out infinite; }
+@keyframes slide { from { transform: translateX(-100%); } to { transform: translateX(250%); } }
+@media (max-width: 640px) { .demo-bar .note { display: none; } }

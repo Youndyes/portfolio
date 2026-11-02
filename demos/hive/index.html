@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hive — jouer en ligne</title>
+  <link rel="stylesheet" href="../demo.css">
+  <script src="https://cjrtnc.leaningtech.com/4.2/loader.js"></script>
+  <style>
+    #display { position: fixed; inset: 48px 0 0 0; background: #111; }
+    #loader { position: fixed; inset: 48px 0 0 0; display: grid; place-items: center; text-align: center; padding: 24px; }
+  </style>
+</head>
+<body>
+  <header class="demo-bar">
+    <a href="../../" class="back">← Portfolio</a>
+    <span class="title">Hive — jeu de plateau (Java / Swing)</span>
+    <span class="note">Le vrai .jar, exécuté dans le navigateur via CheerpJ</span>
+  </header>
+  <div id="display"></div>
+  <div id="loader">
+    <div>
+      <p class="big">Démarrage de la machine virtuelle Java…</p>
+      <p class="muted">Le premier chargement peut prendre 20 à 40 secondes.</p>
+      <div class="bar"><span></span></div>
+    </div>
+  </div>
+  <script type="module">
+    const loader = document.getElementById('loader');
+    try {
+      await cheerpjInit({ version: 17, status: 'none' });
+      cheerpjCreateDisplay(-1, -1, document.getElementById('display'));
+      // le loader disparaît dès que Swing a dessiné quelque chose
+      const obs = new MutationObserver(() => {
+        if (document.querySelector('#display canvas, #display .cjTitleBar, #display div div')) {
+          loader.remove();
+          obs.disconnect();
+        }
+      });
+      obs.observe(document.getElementById('display'), { childList: true, subtree: true });
+      const path = '/app' + new URL('hive.jar', location.href).pathname;
+      const code = await cheerpjRunJar(path);
+      console.log('Hive terminé, code', code);
+    } catch (e) {
+      console.error(e);
+      loader.innerHTML = `<div><p class="big">Impossible de lancer la démo dans ce navigateur.</p><p class="muted">${e}</p></div>`;
+    }
+  </script>
+</body>
+</html>
