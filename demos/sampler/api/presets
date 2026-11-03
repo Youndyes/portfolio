@@ -1,0 +1,101 @@
+[{
+  "name": "808",
+  "type": "Drumkit",
+  "isFactoryPresets": true,
+  "samples": [
+    { "url": "./808/Kick 808X.wav", "name": "kick" },
+    { "url": "./808/Snare 808 1.wav", "name": "snare1" },
+    { "url": "./808/Snare 808X.wav", "name": "snare2" },
+    { "url": "./808/HiTom 808.wav", "name": "tom1" },
+    { "url": "./808/MidTom 808.wav", "name": "tom2" },
+    { "url": "./808/LowTom 808.wav", "name": "tom3" },
+    { "url": "./808/ClosedHH 808.wav", "name": "closed hihats" },
+    { "url": "./808/OpenHH 808 1.wav", "name": "open hihats1" },
+    { "url": "./808/OpenHH 808 2.wav", "name": "open hihats2" },
+    { "url": "./808/Clap 808.wav", "name": "clap1" },
+    { "url": "./808/Clap 808X.wav", "name": "clap2" },
+    { "url": "./808/Rimshot 808.wav", "name": "rimshot" },
+    { "url": "./808/Cymbal 808X.wav", "name": "cymbal" },
+    { "url": "./808/Clave 808.wav", "name": "clave" },
+    { "url": "./808/Maracas 808.wav", "name": "maracas" },
+    { "url": "./808/Cowbell 808.wav", "name": "cowbell" }
+  ]
+},{
+  "name": "Basic Kit",
+  "type": "Drumkit",
+  "isFactoryPresets": true,
+  "samples": [
+    { "url": "./basic-kit/kick.wav", "name": "kick" },
+    { "url": "./basic-kit/snare.wav", "name": "snare" },
+    { "url": "./basic-kit/hihat.wav", "name": "hihat" },
+    { "url": "./basic-kit/tom1.wav", "name": "tom1" },
+    { "url": "./basic-kit/tom2.wav", "name": "tom2" },
+    { "url": "./basic-kit/tom3.wav", "name": "tom3" }
+  ]
+},{
+  "name": "Electronic",
+  "type": "Drumkit",
+  "isFactoryPresets": true,
+  "samples": [
+    { "url": "./electronic/kick.wav", "name": "kick" },
+    { "url": "./electronic/snare.wav", "name": "snare" },
+    { "url": "./electronic/tom1.wav", "name": "tom1" },
+    { "url": "./electronic/tom2.wav", "name": "tom2" },
+    { "url": "./electronic/tom3.wav", "name": "tom3" },
+    { "url": "./electronic/tom4.wav", "name": "tom4" },
+    { "url": "./electronic/hihat1.wav", "name": "hihat1" },
+    { "url": "./electronic/hihat2.wav", "name": "hihat2" },
+    { "url": "./electronic/clap1.wav", "name": "clap1" },
+    { "url": "./electronic/clap2.wav", "name": "clap2" },
+    { "url": "./electronic/crash1.wav", "name": "crash1" },
+    { "url": "./electronic/crash2.wav", "name": "crash2" },
+    { "url": "./electronic/ride1.wav", "name": "ride1" },
+    { "url": "./electronic/ride2.wav", "name": "ride2" },
+    { "url": "./electronic/perc1.wav", "name": "perc1" },
+    { "url": "./electronic/perc2.wav", "name": "perc2" }
+  ]
+},{
+  "name": "Hip-Hop",
+  "type": "Drumkit",
+  "isFactoryPresets": true,
+  "samples": [
+    { "url": "./hip-hop/Kick HipHop 1.wav", "name": "kick1" },
+    { "url": "./hip-hop/Kick HipHop 2.wav", "name": "kick2" },
+    { "url": "./hip-hop/Snare HipHop 1.wav", "name": "snare1" },
+    { "url": "./hip-hop/Snare HipHop 2.wav", "name": "snare2" },
+    { "url": "./hip-hop/ClosedHH HipHop 1.wav", "name": "closed hihats1" },
+    { "url": "./hip-hop/ClosedHH HipHop 2.wav", "name": "closed hihats2" },
+    { "url": "./hip-hop/Clap HipHop.wav", "name": "clap" },
+    { "url": "./hip-hop/Crash HipHop.wav", "name": "crash" },
+    { "url": "./hip-hop/RevCymbal HipHop.wav", "name": "reverse cymbal" },
+    { "url": "./hip-hop/Ride HipHop.wav", "name": "ride" },
+    { "url": "./hip-hop/Triangle HipHop.wav", "name": "triangle" },
+    { "url": "./hip-hop/Vibraslap HipHop.wav", "name": "vibraslap" },
+    { "url": "./hip-hop/Wood HipHop.wav", "name": "wood" },
+    { "url": "./hip-hop/Clave HipHop.wav", "name": "clave" },
+    { "url": "./hip-hop/Combo HipHop 1.wav", "name": "combo1" },
+    { "url": "./hip-hop/Combo HipHop 2.wav", "name": "combo2" }
+  ]
+},{
+  "name": "Steveland Vinyl",
+  "type": "Drumkit",
+  "isFactoryPresets": true,
+  "samples": [
+    { "url": "./steveland-vinyl/Kick Steveland 1.wav", "name": "kick" },
+    { "url": "./steveland-vinyl/Snare Steveland 1.wav", "name": "snare1" },
+    { "url": "./steveland-vinyl/Snare Steveland 2.wav", "name": "snare2" },
+    { "url": "./steveland-vinyl/ClosedHH Steveland.wav", "name": "closed hihats" },
+    { "url": "./steveland-vinyl/OpenHH Steveland.wav", "name": "open hihats" },
+    { "url": "./steveland-vinyl/Tom Steveland 1.wav", "name": "tom1" },
+    { "url": "./steveland-vinyl/Tom Steveland 2.wav", "name": "tom2" },
+    { "url": "./steveland-vinyl/Tom Steveland 3.wav", "name": "tom3" },
+    { "url": "./steveland-vinyl/Tom Steveland 4.wav", "name": "tom4" },
+    { "url": "./steveland-vinyl/Conga Steveland 1.wav", "name": "conga" },
+    { "url": "./steveland-vinyl/Bass Steveland 1.wav", "name": "bass1" },
+    { "url": "./steveland-vinyl/Bass Steveland 2.wav", "name": "bass2" },
+    { "url": "./steveland-vinyl/Rhodes Steveland 1.wav", "name": "rhodes" },
+    { "url": "./steveland-vinyl/Scratch Steveland 1.wav", "name": "scratch1" },
+    { "url": "./steveland-vinyl/Scratch Steveland 2.wav", "name": "scratch2" },
+    { "url": "./steveland-vinyl/Scratch Steveland 3.wav", "name": "scratch3" }
+  ]
+}]

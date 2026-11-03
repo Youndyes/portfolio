@@ -23,6 +23,19 @@ Tout le contenu se trouve dans **`js/data.js`** :
 
 Pour le CV, déposez `cv.pdf` à la racine. Pour les captures d'écran, ajoutez `image: 'img/mon-projet.png'` à un projet.
 
+## Démos jouables (`demos/`)
+
+| Démo | Technique |
+|---|---|
+| `demos/hive/` | le `.jar` Java/Swing d'origine exécuté dans le navigateur par [CheerpJ](https://cheerpj.com) (JVM en WebAssembly, édition communautaire gratuite pour un usage personnel) |
+| `demos/pacman/` | portage JavaScript fidèle de la logique Java du TER (`engine.js`) + rendu canvas (`app.js`) |
+| `demos/sampler/` | le front d'origine ; l'API Node/MongoDB est remplacée par des fichiers statiques (`api/presets`, `presets/`) et les écritures sont simulées (`demo-api.js`) |
+| `demos/twitch/` | la vraie popup de l'extension dans un faux navigateur ; `chrome.*` et l'API Twitch sont simulés (`popup/demo-shim.js`), sans aucun identifiant |
+| JOYN | lien direct vers la version déployée sur Cloudflare Workers |
+
+Pour ajouter une démo à un projet, il suffit d'ajouter un champ `demo: { url, label }` dans `js/data.js`.
+Le dossier `Projets/` (sources brutes) est exclu du dépôt par `.gitignore`.
+
 ## Mise en ligne (GitHub Pages)
 
 1. Poussez le dossier dans un dépôt GitHub (par exemple `ton-pseudo.github.io`).

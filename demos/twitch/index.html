@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Extension Twitch — démo</title>
+  <link rel="stylesheet" href="../demo.css">
+  <style>
+    main { padding: 72px 16px 32px; max-width: 1040px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 24px; }
+    @media (max-width: 860px) { main { grid-template-columns: 1fr; } }
+
+    /* Faux navigateur */
+    .browser { background: #dee1e6; border-radius: 10px; overflow: hidden; box-shadow: 0 12px 40px rgba(0,0,0,.45); color: #202124; min-width: 0; }
+    .tabs { display: flex; align-items: flex-end; gap: 6px; padding: 8px 10px 0; }
+    .dots { display: flex; gap: 6px; margin-right: 8px; padding-bottom: 10px; }
+    .dots i { width: 12px; height: 12px; border-radius: 50%; background: #ff5f57; }
+    .dots i:nth-child(2) { background: #febc2e; } .dots i:nth-child(3) { background: #28c840; }
+    .tab { background: #fff; padding: 8px 14px; border-radius: 8px 8px 0 0; font-size: 13px; }
+    .toolbar { background: #fff; display: flex; align-items: center; gap: 10px; padding: 8px 10px; position: relative; }
+    .url { flex: 1; min-width: 0; background: #f1f3f4; border-radius: 16px; padding: 7px 14px; font-size: 13px; color: #5f6368; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .ext { position: relative; width: 34px; height: 34px; border: 0; border-radius: 50%; background: transparent; cursor: pointer; display: grid; place-items: center; }
+    .ext:hover, .ext.open { background: #e8eaed; }
+    .ext img { width: 22px; height: 22px; }
+    .ext .badge { position: absolute; right: 3px; bottom: 3px; width: 10px; height: 10px; border-radius: 50%; border: 2px solid #fff; background: orange; }
+    .ext .badge.live { background: #1fa64a; }
+    .hint { position: absolute; right: 54px; top: 50%; transform: translateY(-50%); background: #ffd23f; color: #17140a; font-size: 12px; font-weight: 700; padding: 4px 8px; border-radius: 4px; white-space: nowrap; animation: nudge 1.2s ease-in-out infinite; }
+    .hint::after { content: ''; position: absolute; right: -6px; top: 50%; transform: translateY(-50%); border: 6px solid transparent; border-right: 0; border-left-color: #ffd23f; }
+    @keyframes nudge { 50% { transform: translate(-4px, -50%); } }
+    .page { background: #f8f9fa; height: 470px; position: relative; display: grid; place-items: center; color: #9aa0a6; font-size: 14px; }
+    .popup { position: absolute; top: 4px; right: 8px; width: 400px; height: 385px; border: 0; border-radius: 8px; box-shadow: 0 6px 24px rgba(0,0,0,.35); background: #111; max-width: calc(100% - 16px); }
+
+    /* Notification système */
+    .notif { position: fixed; right: 20px; bottom: 20px; width: 340px; max-width: calc(100vw - 40px); background: #2d2e30; color: #e8eaed; border-radius: 8px; box-shadow: 0 8px 30px rgba(0,0,0,.5); padding: 14px; display: grid; grid-template-columns: 48px 1fr; gap: 12px; transform: translateY(140%); transition: transform .35s ease; z-index: 50; }
+    .notif.show { transform: none; }
+    .notif img { width: 48px; height: 48px; }
+    .notif b { display: block; margin-bottom: 4px; }
+    .notif small { color: #9aa0a6; }
+    .notif button { grid-column: 2; justify-self: start; margin-top: 6px; background: #8ab4f8; color: #202124; border: 0; border-radius: 4px; padding: 6px 12px; font-weight: 700; cursor: pointer; }
+
+    /* Panneau de contrôle */
+    aside { background: #161a2b; border: 3px solid #0a0b14; padding: 18px; align-self: start; }
+    aside h2 { font-size: 16px; margin: 0 0 12px; }
+    aside p { color: #a9adc6; font-size: 14px; line-height: 1.5; margin: 0 0 12px; }
+    .switch { display: flex; gap: 8px; margin: 0 0 14px; }
+    .switch button, .action { flex: 1; padding: 10px; font-weight: 700; cursor: pointer; border: 2px solid #0a0b14; background: #20253c; color: #f4f1e8; }
+    .switch button.on { background: #ffd23f; color: #17140a; }
+    .action { width: 100%; background: #9146ff; }
+    .arch { margin-top: 18px; padding-top: 14px; border-top: 2px dashed #2f3555; font-size: 13px; color: #a9adc6; line-height: 1.6; }
+    .arch code { color: #f4f1e8; }
+  </style>
+</head>
+<body>
+  <header class="demo-bar">
+    <a href="../../" class="back">← Portfolio</a>
+    <span class="title">Extension Chrome — notifications Twitch</span>
+    <span class="note">La vraie popup de l’extension, avec des données simulées</span>
+  </header>
+
+  <main>
+    <div class="browser">
+      <div class="tabs"><span class="dots"><i></i><i></i><i></i></span><span class="tab">Nouvel onglet</span></div>
+      <div class="toolbar">
+        <div class="url">chrome://newtab</div>
+        <span class="hint" id="hint">Cliquez sur l’extension</span>
+        <button class="ext" id="ext" title="Addon IDK Corp" aria-label="Ouvrir l’extension">
+          <img src="popup/src/icon48.png" alt=""><span class="badge live" id="badge"></span>
+        </button>
+      </div>
+      <div class="page">
+        <span>Page vide — l’extension vit dans la barre d’outils ↗</span>
+        <iframe class="popup" id="popup" title="Popup de l’extension" hidden></iframe>
+      </div>
+    </div>
+
+    <aside>
+      <h2>Simuler la chaîne</h2>
+      <p>Choisissez l’état du stream : la popup interroge l’API Twitch (simulée ici) et l’icône change de couleur.</p>
+      <div class="switch">
+        <button id="m-live" class="on">🟢 En live</button>
+        <button id="m-off">🟠 Hors ligne</button>
+      </div>
+      <button class="action" id="notify">Déclencher la notification</button>
+      <div class="arch">
+        <b>Comment ça marche</b><br>
+        • <code>popup.js</code> : interface, préférences (<code>chrome.storage</code>), appel à l’API Twitch Helix.<br>
+        • <code>background.js</code> : service worker Manifest V3, vérifie chaque minute (<code>chrome.alarms</code>), met à jour l’icône et envoie les notifications.<br>
+        • <code>server.js</code> : serveur Node / Express qui reçoit les webhooks Twitch EventSub et YouTube.
+      </div>
+    </aside>
+  </main>
+
+  <div class="notif" id="toast" role="status">
+    <img src="popup/src/icon48.png" alt="">
+    <div><b>LEILA EST EN LIGNE !</b>VOIR !<br><small>Addon IDK Corp</small></div>
+    <button id="toast-btn">VOIR</button>
+  </div>
+
+  <script>
+    let mode = 'live';
+    const popup = document.getElementById('popup');
+    const ext = document.getElementById('ext');
+    const toast = document.getElementById('toast');
+    const reload = () => { popup.src = `popup/popup.html?mode=${mode}&t=${Date.now()}`; };
+    ext.addEventListener('click', () => {
+      document.getElementById('hint')?.remove();
+      const open = popup.hidden;
+      popup.hidden = !open;
+      ext.classList.toggle('open', open);
+      if (open) reload();
+    });
+    function setMode(m) {
+      mode = m;
+      document.getElementById('m-live').classList.toggle('on', m === 'live');
+      document.getElementById('m-off').classList.toggle('on', m !== 'live');
+      document.getElementById('badge').classList.toggle('live', m === 'live');
+      if (!popup.hidden) reload();
+    }
+    document.getElementById('m-live').onclick = () => setMode('live');
+    document.getElementById('m-off').onclick = () => setMode('offline');
+    let t;
+    document.getElementById('notify').onclick = () => {
+      setMode('live');
+      toast.classList.add('show');
+      clearTimeout(t);
+      t = setTimeout(() => toast.classList.remove('show'), 5000);
+    };
+    document.getElementById('toast-btn').onclick = () => {
+      toast.classList.remove('show');
+      if (popup.hidden) ext.click();
+    };
+  </script>
+</body>
+</html>

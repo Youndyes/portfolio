@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extension Idkbutimleila</title>
+    <style>
+        /* Taille fixe pour la popup */
+        body {
+            font-family: 'Roboto',Arial, sans-serif;
+            width: 400px; /* Largeur fixe pour la fenêtre */
+            height: 385px; /* Hauteur fixe pour la fenêtre */
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Empêche le défilement */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: url('src/background.png') no-repeat center center;
+            background-size: cover;
+            opacity: 0;
+            transition: opacity 0.3s ease; /* Transition douce pour afficher le contenu */
+        }
+
+        body.loaded {
+            opacity: 1; /* Affiche le contenu principal une fois chargé */
+        }
+
+        /* Écran de chargement */
+        .loading-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 400px; /* Correspond à la largeur fixe de la fenêtre */
+            height: 385px; /* Correspond à la hauteur fixe de la fenêtre */
+            background-color: #dffcc7 ;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000; /* Place l'écran au-dessus de tout */
+            font-size: 16px;
+            color: #333;
+            text-align: center;
+            font-weight: bold;
+            transition: opacity 0.3s ease, visibility 0.3s ease; /* Animation pour masquer l'écran */
+        }
+
+        /* Masquer l'écran une fois chargé */
+        .loading-screen.hidden {
+            opacity: 0; /* Rend transparent */
+            visibility: hidden; /* Masque complètement */
+        }
+
+        /* Style spécifique pour les textes */
+        #stream-title,
+        #stream-category,
+        #stream-viewers {
+            font-family: 'Roboto', Arial, sans-serif;
+            font-size: 14px; /* Ajustez la taille */
+            font-weight: 700; /* Modifiez pour gras (700) ou normal (400) */
+            color: #333; /* Changez la couleur si nécessaire */
+            max-width: 300px;
+        }
+
+        .bell-button {
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            position: absolute;
+            left: 10px; /* Place la cloche à gauche */
+            top: 7px; /* Place la cloche en haut */
+        }
+
+        .bell-button img:hover {
+            transform: scale(1.1); /* Agrandit légèrement l'image au survol */
+            transition: transform 0.3s ease;
+        }
+
+        .social-button {
+            background: none;
+            border: none; /* Supprime les bordures par défaut */
+            outline: none; /* Supprime les contours au focus */
+            padding: 0;
+            cursor: pointer;
+            position: absolute;
+            right: 10px; 
+            top : 10px;
+        }
+
+        .social-button img:hover {
+            transform: scale(1.1);
+            transition: transform 0.3s ease;
+        }
+
+
+        .content {
+            text-align: start;
+            margin-top: 20px;
+        }
+        
+
+        .content img {
+            max-width: 100px;
+            margin-bottom: 20px;
+        }
+
+        /* Conteneur de la vidéo */
+        .video-preview {
+            position: relative;
+            display: inline-block; /* Ajuste le conteneur à l'image */
+            margin: 0 auto; /* Centrage horizontal */
+            width: fit-content; /* La largeur correspond au contenu (image) */
+            height: fit-content; /* La hauteur correspond au contenu */
+            overflow: hidden; /* Empêche les débordements */
+            border: none; /* Supprime toute bordure supplémentaire */
+            transition: transform 0.3s ease; /* Animation lors du survol et du retrait */
+            top: 40px;
+            max-height: 100vh;
+        }
+
+        /* Image de la vidéo avec bordures */
+        .video-preview img#preview-image {
+            width: 250px; /* Taille de la vidéo */
+            height: auto;
+            max-width: 100%;
+            border: solid 2px #C3A879; /* Bordure noire autour de l'image */
+            border-radius: 10px; /* Arrondir légèrement les coins de l'image */
+            transition: transform 0.3s ease; /* Animation lors du survol et du retrait */
+            display: block;
+            padding: 0;
+            margin: 0;
+        }
+
+        /* Logo Play centré par rapport à la vidéo */
+        .video-preview .play-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            opacity: 0.8; /* Légère transparence */
+            transition: transform 0.3s ease, opacity 0.3s ease; /* Animation lors du survol et du retrait */
+            pointer-events: none; /* Empêche tout clic sur l'icône */
+            z-index: 2; /* S'assure qu'elle est visible au-dessus de l'image */
+        }
+
+        /* Animation sur le conteneur au survol */
+        .video-preview:hover {
+            transform: scale(1.05); /* Agrandit légèrement la vidéo au survol */
+        }
+
+        /* Animation sur le logo Play au survol */
+        .video-preview:hover .play-icon {
+            transform: translate(-50%, -50%) scale(1.2); /* Agrandit le logo au survol */
+            opacity: 1; /* Augmente l'opacité du logo */
+        }
+
+
+        .social-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .social-buttons a img {
+            width: 30px;
+            height: 30px;
+        }
+
+        .social-buttons a img:hover {
+            transition: transform 0.3s ease;
+            transform: scale(1.1);
+            cursor: pointer;
+        }
+
+        .social-buttons a img, 
+        .bell-button img, 
+        .social-button img {
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+
+        /* Style du menu déroulant */
+        .menu {
+            position: absolute;
+            top: 40px;
+            left: 10px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            width: 250px; /* Largeur du menu */
+            opacity: 0; /* Masqué par défaut */
+            visibility: hidden; /* Empêche les clics sur le menu masqué */
+            transform: translateY(-10px); /* Position initiale pour l'animation */
+            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s linear 0.3s;
+            z-index: 1000; /* Place le menu au-dessus des autres éléments */
+        }
+
+        /* Triangle au-dessus du menu */
+        .menu::before {
+            content: "";
+            position: absolute;
+            top: -10px; /* Place le triangle au-dessus du menu */
+            left: 5px; /* Ajustez pour aligner le triangle sous la cloche */
+            border-width: 0 10px 10px 10px; /* Largeur et hauteur du triangle */
+            border-style: solid;
+            border-color: transparent transparent white transparent; /* Triangle blanc pointant vers le haut */
+            z-index: 1000; /* Assurez-vous qu'il est visible */
+        }
+
+        /* Lorsqu'il est visible */
+        .menu.visible {
+            opacity: 1; /* Rend visible */
+            visibility: visible;
+            transform: translateY(0); /* Repositionne à l'emplacement final */
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        /* Style des options du menu */
+        .menu label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .menu input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .menu button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .menu button:hover {
+            background-color: #45a049;
+        }
+
+        .icon {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 5px;
+            margin-top: 17px; /* Shift the icon 5px down */
+        }
+
+        .offline-message {
+        font-size: 16px;
+        font-weight: bold;
+        color: #C3A879;
+        text-align: center;
+        margin-top: 20px;
+        }
+
+        .hidden {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+        }
+
+        .visible {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.3s ease;
+        }
+
+    </style>
+</head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<body>
+    <!-- Écran de chargement -->
+    <div id="loading-screen" class="loading-screen">
+        <span style="color: #C3A879;">Chargement...</span>
+    </div>
+
+    <!-- Contenu principal -->
+    <div class="status-bar">
+        <button id="bell-button" class="bell-button">
+            <img src="src/bell-icon.png" alt="Notifications" width="25">
+        </button>
+        <div class="live-status"></div>
+        <a class="social-button" href="https://www.twitch.tv/idkbutimleila" target="_blank">
+            <img src="src/twitch.png" alt="Twitch" width="30">
+        </a>
+    </div>
+    <div id="notification-menu" class="menu hidden">
+        <form id="settings-form">
+            <label>
+                <input type="checkbox" id="notif-twitch">
+                Notifications Twitch
+            </label>
+            <label>
+                <input type="checkbox" id="notif-youtube">
+                Notifications Youtube
+            </label>
+        </form>
+    </div>
+    <div class="content">
+        <div class="video-preview">
+            <a href="https://www.twitch.tv/idkbutimleila" target="_blank">
+                <img id="preview-image" src="src/live-preview.png" alt="Live Preview">
+                <img class="play-icon" src="src/play.png" alt="Play Icon">
+            </a>
+        </div>
+        <p id="offline-message" class="offline-message hidden">
+            Le stream est actuellement hors ligne. 
+        </p>
+        <p id="stream-title"></p>
+        <p id="stream-category"><em></em></p>
+        <p id="stream-viewers"></p>
+    </div>
+    <div class="social-buttons">
+        <a href="https://x.com/idkbvtimleila" target="_blank">
+            <img src="src/x.png" alt="X">
+        </a>
+        <a href="https://www.youtube.com/@idkbutimleila" target="_blank">
+            <img src="src/ytb.png" alt="YouTube">
+        </a>
+        <a href="https://www.tiktok.com/@clips2leilo" target="_blank">
+            <img src="src/tiktok.png" alt="TikTok">
+        </a>
+    </div>
+    <script src="demo-shim.js"></script>
+    <script src="popup.js"></script>
+</body>
+</html>
