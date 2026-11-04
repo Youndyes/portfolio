@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { LANDMARKS } from './landmarks.js';
 
 // ------------------------------------------------------------
 //  Layout de la carte (1 unité = 1 tuile)
@@ -355,7 +356,7 @@ export function buildWorld(scene, profile, projects) {
   function addZone({ id, kind, data, title, color, style, b, p }) {
     const dx = p[0] - b[0], dz = p[1] - b[1];
     const facing = Math.abs(dx) > Math.abs(dz) ? [Math.sign(dx), 0] : [0, Math.sign(dz)];
-    const landmark = null;
+    const landmark = LANDMARKS[style] ? LANDMARKS[style](color) : null;
     const { group, top } = landmark || makeBuilding(style, color, facing);
     group.userData.effects ||= {};
     if (landmark?.update) animated.landmarks.push(landmark);
