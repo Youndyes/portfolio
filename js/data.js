@@ -47,7 +47,7 @@ export const projects = [
     title: 'JOYN',
     year: '2026 · M2',
     style: 'joyn',
-    color: '#2dd4bf',
+    color: '#f26b46',
     tags: ['Flutter', 'Dart', 'Web + Mobile', 'Docker', 'CI/CD', 'Cloudflare'],
     short: 'Plateforme de mise en relation candidats / entreprises pour l’alternance.',
     description: [

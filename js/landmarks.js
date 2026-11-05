@@ -47,7 +47,7 @@ function voxelMesh(cells, s, gain = 1) {
 }
 
 // Sprite pixel art extrudé : lignes de haut en bas, '.' = vide. Origine en bas au centre.
-function sprite(rows, palette, s = 0.35, depth = 2) {
+function sprite(rows, palette, s = 0.35, depth = 2, gain = 1.55) {
   const h = rows.length, w = Math.max(...rows.map((r) => r.length));
   const cells = [];
   rows.forEach((row, r) =>
@@ -58,7 +58,7 @@ function sprite(rows, palette, s = 0.35, depth = 2) {
     }),
   );
   // les sprites font face à la caméra, donc dos au soleil : on compense
-  const mesh = voxelMesh(cells, s, 1.55);
+  const mesh = voxelMesh(cells, s, gain);
   mesh.userData.size = { w: w * s, h: h * s };
   return mesh;
 }
@@ -71,45 +71,67 @@ function plinth(g, trim, base = '#454a5a') {
   }
 }
 
-const HEART = ['.HH.HH.', 'HHHHHHH', 'HHHHHHH', '.HHHHH.', '..HHH..', '...H...'];
+// ---------------------------------------------------------------------------
+//  JOYN : le logo (disque dégradé rouge → orange, glyphe blanc en relief)
+// ---------------------------------------------------------------------------
+// Le logo est décrit par des formes simples (coordonnées normalisées, rayon du
+// disque = 1, y vers le bas) puis échantillonné sur une grille de pixels.
+function joynLogo(n) {
+  const ring = (x, y, cx, cy, r, w) => Math.abs(Math.hypot(x - cx, y - cy) - r) <= w / 2;
+  const ang = (x, y, cx, cy) => (Math.atan2(y - cy, x - cx) * 180) / Math.PI; // 0 = droite, 90 = bas
+  const seg = (x, y, ax, ay, bx, by, w) => {
+    const dx = bx - ax, dy = by - ay;
+    const k = Math.max(0, Math.min(1, ((x - ax) * dx + (y - ay) * dy) / (dx * dx + dy * dy)));
+    return Math.hypot(x - ax - k * dx, y - ay - k * dy) <= w / 2;
+  };
+  const W = 0.12; // épaisseur du trait
+  const glyph = (x, y) => {
+    // grand « C » ouvert en haut à droite
+    const a = ang(x, y, -0.08, 0.12);
+    if (ring(x, y, -0.08, 0.12, 0.42, W) && !(a > -75 && a < 35)) return true;
+    // petite boucle intérieure, ouverte en haut à gauche
+    const b2 = ang(x, y, 0.15, 0);
+    if (ring(x, y, 0.15, 0, 0.17, W) && !(b2 > -160 && b2 < -105)) return true;
+    // trait diagonal qui descend vers la boucle
+    if (seg(x, y, 0.24, -0.5, 0.06, -0.15, W)) return true;
+    // point en haut à droite
+    return Math.hypot(x - 0.3, y + 0.7) <= 0.1;
+  };
+  const disc = [], white = [];
+  const bands = 'ABCDE';
+  for (let r = 0; r < n; r++) {
+    let dRow = '', wRow = '';
+    for (let c = 0; c < n; c++) {
+      const x = ((c + 0.5) / n) * 2 - 1, y = ((r + 0.5) / n) * 2 - 1;
+      const inside = x * x + y * y <= 0.97;
+      const isW = inside && glyph(x, y);
+      dRow += inside && !isW ? bands[Math.min(4, Math.floor(((x + 1) / 2) * 5))] : '.';
+      wRow += isW ? 'W' : '.';
+    }
+    disc.push(dRow);
+    white.push(wRow);
+  }
+  return { disc, white };
+}
 
-// ---------------------------------------------------------------------------
-//  JOYN : un smartphone géant qui affiche un « match »
-// ---------------------------------------------------------------------------
 function joyn(accent) {
   const g = new THREE.Group();
   plinth(g, accent);
-  const phone = new THREE.Group();
-  phone.rotation.y = FACE_CAMERA;
-  phone.position.y = 0.3;
-  g.add(phone);
-  phone.add(b(1.8, 0.25, 1.2, '#1d2233', 0, 0.125, 0));
-  phone.add(b(3.2, 5.6, 0.5, '#1d2233', 0, 3.05, 0));
-  phone.add(b(2.8, 4.9, 0.06, '#eefcf9', 0, 3.0, 0.27, 0.12));
-  phone.add(b(2.8, 0.55, 0.07, accent, 0, 5.15, 0.28, 0.3));
-  phone.add(b(0.7, 0.12, 0.05, '#0b0e18', 0, 5.65, 0.27));
-  // deux profils qui « matchent »
-  for (const [x, c] of [[-0.68, '#ff8a3d'], [0.68, '#4c6fff']]) {
-    phone.add(b(1.15, 1.45, 0.05, '#ffffff', x, 2.15, 0.3));
-    phone.add(b(0.5, 0.5, 0.05, c, x, 2.5, 0.33));
-    phone.add(b(0.8, 0.1, 0.05, '#c9d2e3', x, 1.95, 0.33));
-    phone.add(b(0.6, 0.1, 0.05, '#c9d2e3', x, 1.75, 0.33));
-  }
-  phone.add(b(2.2, 0.38, 0.06, accent, 0, 1.0, 0.3, 0.3));
-  const heart = sprite(HEART, { H: '#ff4d6d' }, 0.2, 1);
-  heart.position.set(0, 3.55, 0.33);
-  phone.add(dyn(heart));
-  const floatHeart = sprite(HEART, { H: '#ff4d6d' }, 0.18, 2);
-  floatHeart.position.set(0, 6.4, 0);
-  phone.add(dyn(floatHeart));
+  const holder = new THREE.Group();
+  holder.rotation.y = FACE_CAMERA;
+  g.add(holder);
+  holder.add(b(1.4, 0.3, 1.4, '#3b3f4f', 0, 0.45, 0));
+  const { disc, white } = joynLogo(30);
+  const logo = new THREE.Group();
+  // matériau non éclairé : le logo garde ses vraies couleurs malgré le contre-jour
+  const flat = (m) => { m.material = new THREE.MeshBasicMaterial(); return m; };
+  logo.add(flat(sprite(disc, { A: '#f0463a', B: '#f25a41', C: '#f36e48', D: '#f4824f', E: '#f59657' }, 0.17, 2, 1)));
+  logo.add(flat(sprite(white, { W: '#ffffff' }, 0.17, 4, 1))); // glyphe en relief
+  holder.add(dyn(logo));
   return {
     group: g,
-    top: 7.8,
-    update(t) {
-      heart.scale.setScalar(1 + Math.max(0, Math.sin(t * 6)) * 0.15);
-      floatHeart.position.y = 6.4 + Math.sin(t * 2) * 0.2;
-      floatHeart.rotation.y = Math.sin(t * 1.5) * 0.5;
-    },
+    top: 6.9,
+    update(t) { logo.position.y = 0.95 + Math.sin(t * 1.8) * 0.2; },
   };
 }
 
