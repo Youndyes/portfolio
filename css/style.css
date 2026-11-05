@@ -425,17 +425,4 @@ kbd {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
 
-/* ---------- Visionneuse PDF ---------- */
-#panel.wide { width: min(920px, 100%); }
-.doc-actions { margin: 0 0 16px; }
-.pdf-pages { display: grid; gap: 12px; }
-.pdf-pages canvas {
-  display: block;
-  width: 100%;
-  height: auto;
-  background: #fff;
-  border: 3px solid var(--line);
-  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.35);
-}
-.pdf-loading { color: var(--mute); padding: 24px 0; text-align: center; animation: blink 0.8s steps(2) infinite; }
 @keyframes enter-pulse { 50% { transform: translateY(-4px); } }

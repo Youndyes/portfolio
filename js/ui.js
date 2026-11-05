@@ -10,55 +10,12 @@ const linkBtns = (links) =>
     .map((l) => `<a class="px-btn" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)} ↗</a>`)
     .join('');
 
-// ---------------------------------------------------------------------------
-//  Visionneuse PDF : les pages sont dessinées avec pdf.js (chargé à la demande),
-//  ce qui fonctionne aussi sur mobile, où les PDF intégrés s'affichent mal.
-// ---------------------------------------------------------------------------
-const docViewer = (url, title) => `
+// Les PDF (CV, rapport) s'ouvrent toujours dans un nouvel onglet
+const pdfLinks = (url, label) => `
   <div class="links doc-actions">
-    <a class="px-btn primary" href="${esc(url)}" download>⬇ Télécharger le PDF</a>
-    <a class="px-btn" href="${esc(url)}" target="_blank" rel="noopener">Ouvrir dans un onglet ↗</a>
-  </div>
-  <div class="pdf-pages" data-url="${esc(url)}" aria-label="${esc(title)}">
-    <p class="pdf-loading">Chargement du document…</p>
+    <a class="px-btn primary" href="${esc(url)}" target="_blank" rel="noopener">📄 ${esc(label)} ↗</a>
+    <a class="px-btn" href="${esc(url)}" download>⬇ Télécharger</a>
   </div>`;
-
-let pdfjsPromise = null;
-function loadPdfJs() {
-  pdfjsPromise ||= import('https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.min.mjs').then((m) => {
-    m.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.worker.min.mjs';
-    return m;
-  });
-  return pdfjsPromise;
-}
-
-async function renderPdf(container) {
-  const url = container.dataset.url;
-  try {
-    const pdfjs = await loadPdfJs();
-    const doc = await pdfjs.getDocument(url).promise;
-    if (!container.isConnected) return;
-    container.innerHTML = '';
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    for (let i = 1; i <= doc.numPages; i++) {
-      if (!container.isConnected) return; // le panneau a été fermé entre-temps
-      const page = await doc.getPage(i);
-      const width = container.clientWidth || 600;
-      const base = page.getViewport({ scale: 1 });
-      const vp = page.getViewport({ scale: (width / base.width) * dpr });
-      const canvas = document.createElement('canvas');
-      canvas.width = vp.width;
-      canvas.height = vp.height;
-      canvas.setAttribute('aria-label', `Page ${i}`);
-      container.appendChild(canvas);
-      await page.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise;
-    }
-  } catch (err) {
-    console.error(err);
-    if (container.isConnected)
-      container.innerHTML = '<p class="pdf-loading">Aperçu indisponible — utilisez « Ouvrir dans un onglet ».</p>';
-  }
-}
 
 const PROMPTS = {
   project: (z) => `Voir le projet « ${z.title} »`,
@@ -100,10 +57,9 @@ export class UI {
     }, true);
     this.overlay.addEventListener('click', (e) => {
       if (e.target === this.overlay) return this.close();
-      const el = e.target.closest('[data-close],[data-zone],[data-teleport],[data-list],[data-start],[data-doc]');
+      const el = e.target.closest('[data-close],[data-zone],[data-teleport],[data-list],[data-start]');
       if (!el) return;
       if (el.hasAttribute('data-close')) this.close();
-      else if (el.hasAttribute('data-doc') && this.current?.data?.doc) this.openDoc(this.current);
       else if (el.hasAttribute('data-list')) this.openList();
       else if (el.hasAttribute('data-start')) { this.close(); this.start(); }
       else if (el.hasAttribute('data-zone')) {
@@ -186,26 +142,9 @@ export class UI {
   show(html, accent = '#ffd23f') {
     this.body.innerHTML = html;
     this.panel.style.setProperty('--accent', accent);
-    this.panel.classList.toggle('wide', !!this.body.querySelector('.pdf-pages'));
     this.overlay.hidden = false;
     this.panel.scrollTop = 0;
     this.panel.querySelector('.close').focus({ preventScroll: true });
-    const pages = this.body.querySelector('.pdf-pages');
-    if (pages) renderPdf(pages);
-  }
-
-  // Document lié à un projet (ex. rapport de recherche), affiché dans le panneau
-  openDoc(zone) {
-    const d = zone.data.doc;
-    this.show(`
-      <header class="panel-head">
-        <p class="kicker">${esc(zone.title)}</p>
-        <h2>${esc(d.title || d.label)}</h2>
-      </header>
-      ${docViewer(d.url, d.title || d.label)}
-      <footer class="panel-foot"><button class="px-btn ghost" data-zone="${esc(zone.id)}">← Retour au projet</button></footer>`,
-    zone.color);
-    this.current = zone;
   }
 
   close() {
@@ -231,7 +170,7 @@ export class UI {
         </header>
         ${d.demo ? `<a class="px-btn primary demo-btn" href="${esc(d.demo.url)}" data-demo
             ${d.demo.external ? 'target="_blank" rel="noopener"' : ''}>▶ ${esc(d.demo.label)}${d.demo.external ? ' ↗' : ''}</a>` : ''}
-        ${d.doc ? `<button class="px-btn primary demo-btn" data-doc>📄 ${esc(d.doc.label)}</button>` : ''}
+        ${d.doc ? `<a class="px-btn primary demo-btn" href="${esc(d.doc.url)}" target="_blank" rel="noopener">📄 ${esc(d.doc.label)} ↗</a>` : ''}
         ${d.note ? `<p class="note">${esc(d.note)}</p>` : ''}
         ${d.image ? `<img class="shot" src="${esc(d.image)}" alt="Capture du projet ${esc(d.title)}">` : ''}
         <div class="prose">${paras(d.description)}</div>
@@ -253,7 +192,7 @@ export class UI {
           .join('')}</ul>` : ''}
         <h3 class="section-title">Compétences</h3>
         <div class="skills">${skills}</div>
-        <div class="links">${p.cv ? `<button class="px-btn primary" data-zone="cv">📄 Voir mon CV</button>` : ''}</div>`;
+        <div class="links">${p.cv ? `<a class="px-btn primary" href="${esc(p.cv)}" target="_blank" rel="noopener">📄 Voir mon CV ↗</a>` : ''}</div>`;
     } else if (zone.kind === 'contact') {
       html = `
         <header class="panel-head">
@@ -273,7 +212,8 @@ export class UI {
           <h2>Mon CV</h2>
           <p class="sub">${esc(p.status)}</p>
         </header>
-        ${p.cv ? docViewer(p.cv, `CV ${p.name}`) : '<p>CV bientôt disponible.</p>'}`;
+        <div class="prose"><p>Mon CV s’ouvre dans un nouvel onglet. Vous pouvez aussi le télécharger.</p></div>
+        ${p.cv ? pdfLinks(p.cv, 'Ouvrir mon CV') : '<p>CV bientôt disponible.</p>'}`;
     }
     html += back || go ? `<footer class="panel-foot">${back}${go}</footer>` : '';
     this.show(html, zone.color);
