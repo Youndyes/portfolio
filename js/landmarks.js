@@ -533,13 +533,16 @@ function cv(accent) {
   const holder = new THREE.Group();
   holder.rotation.y = FACE_CAMERA;
   g.add(holder);
-  // petit pupitre incliné qui tient la feuille
-  holder.add(b(2.6, 0.35, 1.2, '#3b3f4f', 0, 0.48, -0.1));
+  // petit socle sur lequel la feuille tourne sur elle-même
+  holder.add(b(1.4, 0.3, 1.4, '#3b3f4f', 0, 0.45, 0));
   const sheet = sprite(CV_SHEET, { O: '#1b1b22', W: '#f4f1fa', F: '#5a5a66', D: '#5a5a66', L: '#1b1b22', S: '#d9d6e6' }, 0.27, 2);
-  sheet.position.set(0, 0.6, 0);
-  sheet.rotation.x = -0.12;
-  holder.add(sheet);
-  return { group: g, top: 6.8 };
+  sheet.position.set(0, 0.75, 0);
+  holder.add(dyn(sheet));
+  return {
+    group: g,
+    top: 6.9,
+    update(t) { sheet.rotation.y = t * 1.2; },
+  };
 }
 
 export const LANDMARKS = { joyn, hive, pacman, sampler, twitch, ssd, compression, sbls, about, contact, cv };

@@ -77,7 +77,7 @@ export class UI {
   renderIntro() {
     const p = this.profile;
     const keys = `<div class="only-desktop"><div><kbd>Z</kbd><kbd>Q</kbd><kbd>S</kbd><kbd>D</kbd> ou <kbd class="ar">↑</kbd><kbd class="ar">←</kbd><kbd class="ar">↓</kbd><kbd class="ar">→</kbd> se déplacer</div></div>
-      <div class="only-desktop"><kbd>Espace</kbd> / <kbd>Entrée</kbd> entrer dans un bâtiment</div>
+      <div class="only-desktop"><kbd>Espace</kbd> / <kbd>E</kbd> entrer dans un bâtiment</div>
       <div class="only-compact">Flèches à l’écran pour vous déplacer, bouton <b>ENTRER</b> sur une dalle.</div>`;
     document.getElementById('intro-card').innerHTML = `
       <p class="kicker">Portfolio</p>
@@ -258,7 +258,7 @@ export class UI {
       </header>
       <div class="keys big">
         <div><kbd>Z</kbd><kbd>Q</kbd><kbd>S</kbd><kbd>D</kbd> / flèches — se déplacer (la voiture va dans la direction indiquée à l’écran)</div>
-        <div><kbd>Espace</kbd> ou <kbd>Entrée</kbd> — entrer dans le bâtiment</div>
+        <div><kbd>Espace</kbd> ou <kbd>E</kbd> — entrer dans le bâtiment</div>
         <div><kbd>R</kbd> — revenir au départ</div>
         <div><kbd>Molette</kbd> — zoom</div>
         <div><kbd>Clic</kbd> sur un bâtiment — l’ouvrir directement</div>

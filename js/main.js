@@ -160,7 +160,7 @@ async function init() {
     if (ui.handleKey(e)) return;
     if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(e.code)) e.preventDefault();
     keys.add(e.code);
-    if ((e.code === 'Space' || e.code === 'Enter' || e.code === 'NumpadEnter') && activeZone) {
+    if ((e.code === 'Space' || e.code === 'KeyE') && activeZone) {
       e.preventDefault();
       document.activeElement?.blur?.();
       ui.openZone(activeZone);
