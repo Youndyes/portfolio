@@ -59,4 +59,4 @@ Le site étant statique, il fonctionne aussi tel quel sur Netlify, Vercel ou Clo
 ZQSD / WASD / flèches pour se déplacer (la voiture va dans la direction indiquée à l'écran
 et s'arrête dès qu'on relâche), Espace ou E pour entrer,
 R pour revenir au départ, la molette pour zoomer. On peut aussi cliquer directement sur un bâtiment.
-Sur mobile, des boutons tactiles s'affichent à l'écran.
+Sur mobile, un joystick (toutes directions) et un bouton ENTRER s'affichent à l'écran.

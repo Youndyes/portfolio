@@ -152,7 +152,7 @@ async function init() {
 
   // ---------- Entrées ----------
   const keys = new Set();
-  const touch = { up: false, down: false, left: false, right: false };
+  const touch = { x: 0, y: 0 };
   let activeZone = null;
 
   addEventListener('keydown', (e) => {
@@ -169,16 +169,40 @@ async function init() {
   addEventListener('keyup', (e) => keys.delete(e.code));
   addEventListener('blur', () => keys.clear());
 
-  for (const btn of document.querySelectorAll('#touch [data-k]')) {
-    const k = btn.dataset.k;
-    const on = (e) => { e.preventDefault(); touch[k] = true; btn.classList.add('on'); };
-    const off = (e) => { e.preventDefault(); touch[k] = false; btn.classList.remove('on'); };
-    btn.addEventListener('pointerdown', on);
-    btn.addEventListener('pointerup', off);
-    btn.addEventListener('pointerleave', off);
-    btn.addEventListener('pointercancel', off);
-    btn.addEventListener('contextmenu', (e) => e.preventDefault());
-  }
+  // Joystick : toutes les directions, l'inclinaison règle la vitesse
+  const stick = document.getElementById('stick');
+  const knob = stick.querySelector('.knob');
+  let stickId = null;
+  const moveStick = (e) => {
+    const r = stick.getBoundingClientRect();
+    const max = r.width / 2;
+    let dx = e.clientX - (r.left + max), dy = e.clientY - (r.top + max);
+    const len = Math.hypot(dx, dy);
+    if (len > max) { dx *= max / len; dy *= max / len; }
+    knob.style.transform = `translate(${dx}px, ${dy}px)`;
+    const m = Math.min(1, len / max);
+    // petite zone morte au centre, puis réponse progressive
+    const s = m < 0.15 ? 0 : (m - 0.15) / 0.85;
+    touch.x = len ? (dx / len) * s : 0;
+    touch.y = len ? (-dy / len) * s : 0;
+  };
+  const releaseStick = () => {
+    stickId = null;
+    touch.x = touch.y = 0;
+    knob.style.transform = '';
+    stick.classList.remove('on');
+  };
+  stick.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    stickId = e.pointerId;
+    try { stick.setPointerCapture(e.pointerId); } catch { /* pointeur déjà relâché */ }
+    stick.classList.add('on');
+    moveStick(e);
+  });
+  stick.addEventListener('pointermove', (e) => { if (e.pointerId === stickId) moveStick(e); });
+  stick.addEventListener('pointerup', (e) => { if (e.pointerId === stickId) releaseStick(); });
+  stick.addEventListener('pointercancel', releaseStick);
+  stick.addEventListener('contextmenu', (e) => e.preventDefault());
   // Bouton « Entrer » : grisé tant que la voiture n'est pas sur une dalle
   const enterBtn = document.getElementById('btn-enter');
   enterBtn.addEventListener('click', () => { if (activeZone && !ui.blocking) ui.openZone(activeZone); });
@@ -187,10 +211,11 @@ async function init() {
   const NO_INPUT = { x: 0, y: 0 };
   function readInput() {
     const k = (...codes) => codes.some((c) => keys.has(c));
-    const up = k('KeyW', 'ArrowUp') || touch.up;
-    const down = k('KeyS', 'ArrowDown') || touch.down;
-    const left = k('KeyA', 'ArrowLeft') || touch.left;
-    const right = k('KeyD', 'ArrowRight') || touch.right;
+    if (touch.x || touch.y) return { x: touch.x, y: touch.y };
+    const up = k('KeyW', 'ArrowUp');
+    const down = k('KeyS', 'ArrowDown');
+    const left = k('KeyA', 'ArrowLeft');
+    const right = k('KeyD', 'ArrowRight');
     return { x: (right ? 1 : 0) - (left ? 1 : 0), y: (up ? 1 : 0) - (down ? 1 : 0) };
   }
 

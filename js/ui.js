@@ -78,7 +78,7 @@ export class UI {
     const p = this.profile;
     const keys = `<div class="only-desktop"><div><kbd>Z</kbd><kbd>Q</kbd><kbd>S</kbd><kbd>D</kbd> ou <kbd class="ar">↑</kbd><kbd class="ar">←</kbd><kbd class="ar">↓</kbd><kbd class="ar">→</kbd> se déplacer</div></div>
       <div class="only-desktop"><kbd>Espace</kbd> / <kbd>E</kbd> entrer dans un bâtiment</div>
-      <div class="only-compact">Flèches à l’écran pour vous déplacer, bouton <b>ENTRER</b> sur une dalle.</div>`;
+      <div class="only-compact">Joystick en bas à gauche pour conduire, bouton <b>ENTRER</b> sur une dalle.</div>`;
     document.getElementById('intro-card').innerHTML = `
       <p class="kicker">Portfolio</p>
       <h1>${esc(p.name)}</h1>
