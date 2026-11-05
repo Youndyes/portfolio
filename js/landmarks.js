@@ -533,7 +533,7 @@ function cv(accent) {
   const holder = new THREE.Group();
   holder.rotation.y = FACE_CAMERA;
   g.add(holder);
-  // petit socle sur lequel la feuille tourne sur elle-même
+  // petit socle au-dessus duquel la feuille flotte de haut en bas
   holder.add(b(1.4, 0.3, 1.4, '#3b3f4f', 0, 0.45, 0));
   const sheet = sprite(CV_SHEET, { O: '#1b1b22', W: '#f4f1fa', F: '#5a5a66', D: '#5a5a66', L: '#1b1b22', S: '#d9d6e6' }, 0.27, 2);
   sheet.position.set(0, 0.75, 0);
@@ -541,7 +541,7 @@ function cv(accent) {
   return {
     group: g,
     top: 6.9,
-    update(t) { sheet.rotation.y = t * 1.2; },
+    update(t) { sheet.position.y = 0.95 + Math.sin(t * 1.8) * 0.2; },
   };
 }
 
