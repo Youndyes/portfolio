@@ -191,28 +191,61 @@ kbd {
 @keyframes pop { from { transform: translate(-50%, 12px) scale(0.9); opacity: 0; } }
 @keyframes bob { 50% { transform: translate(-50%, -4px); } }
 
-/* ---------- Tactile ---------- */
+/* ---------- Contrôles à l'écran (petits écrans / tactile) ---------- */
 #touch {
   position: fixed;
   left: 16px;
   right: 16px;
   bottom: 16px;
-  display: flex;
+  display: none;
   justify-content: space-between;
+  align-items: flex-end;
   pointer-events: none;
+  z-index: 5;
 }
-.tgroup { display: flex; gap: 12px; pointer-events: auto; }
+.dpad {
+  display: grid;
+  grid-template-columns: repeat(3, 60px);
+  grid-template-rows: repeat(2, 60px);
+  gap: 6px;
+  pointer-events: auto;
+}
+.dpad .u { grid-column: 2; grid-row: 1; }
+.dpad .l { grid-column: 1; grid-row: 2; }
+.dpad .d { grid-column: 2; grid-row: 2; }
+.dpad .r { grid-column: 3; grid-row: 2; }
 #touch button {
-  width: 68px;
-  height: 68px;
-  font-size: 24px;
+  font-size: 22px;
   color: var(--ink);
-  background: rgba(22, 26, 43, 0.85);
+  background: rgba(22, 26, 43, 0.88);
   border: 4px solid var(--line);
   box-shadow: inset 0 0 0 2px var(--hi), 4px 4px 0 rgba(0, 0, 0, 0.35);
   touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: pointer;
 }
-#touch button.on { background: var(--accent); color: #17140a; }
+#touch .dpad button.on { background: var(--accent); color: #17140a; }
+#touch .enter {
+  --accent: #ffd23f;
+  pointer-events: auto;
+  min-width: 112px;
+  height: 72px;
+  padding: 0 14px;
+  font-family: var(--pixel-font);
+  font-size: 12px;
+  background: var(--accent);
+  color: #17140a;
+  animation: enter-pulse 1.4s ease-in-out infinite;
+}
+#touch .enter:disabled {
+  background: rgba(60, 63, 78, 0.85);
+  color: rgba(244, 241, 232, 0.35);
+  box-shadow: inset 0 0 0 2px #2a2e40, 4px 4px 0 rgba(0, 0, 0, 0.25);
+  animation: none;
+  cursor: default;
+}
+.only-compact { display: none; }
 
 /* ---------- Panneau ---------- */
 #overlay {
@@ -375,10 +408,15 @@ kbd {
 @keyframes blink { 50% { opacity: 0.3; } }
 
 /* ---------- Petits écrans ---------- */
-@media (max-width: 720px), (pointer: coarse) {
+@media (max-width: 760px), (pointer: coarse) {
   #controls-hint { display: none; }
+  .playing #touch { display: flex; }
+  .only-desktop { display: none !important; }
+  .only-compact { display: initial; }
+  div.only-compact { display: block; }
   #minimap { width: 112px; height: 112px; top: 92px; bottom: auto; right: 16px; }
-  #prompt { bottom: 104px; font-size: 21px; }
+  #prompt { bottom: 158px; font-size: 20px; width: max-content; max-width: calc(100vw - 32px); padding: 8px 12px; }
+  #prompt .key { display: none; }
   .hud-role { font-size: 17px; }
   #panel { padding: 22px 18px 18px; }
 }
@@ -386,3 +424,18 @@ kbd {
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* ---------- Visionneuse PDF ---------- */
+#panel.wide { width: min(920px, 100%); }
+.doc-actions { margin: 0 0 16px; }
+.pdf-pages { display: grid; gap: 12px; }
+.pdf-pages canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #fff;
+  border: 3px solid var(--line);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.35);
+}
+.pdf-loading { color: var(--mute); padding: 24px 0; text-align: center; animation: blink 0.8s steps(2) infinite; }
+@keyframes enter-pulse { 50% { transform: translateY(-4px); } }

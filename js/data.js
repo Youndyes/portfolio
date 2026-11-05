@@ -9,14 +9,13 @@ export const profile = {
   name: 'Younes Bensallah',
   role: 'Étudiant en M2 Sciences et Technologie du Logiciel',
   school: 'Sorbonne Université',
-  status: 'À la recherche d’une alternance en développement backend',
+  status: 'À la recherche d’un stage de fin d’études en développement logiciel',
   email: 'younes3138@gmail.com',
   github: GITHUB,
   linkedin: 'https://linkedin.com/in/younes-bensallah',
   cv: 'cv.pdf',
   about: [
-    'Actuellement en Master 2 Sciences et Technologie du Logiciel à Sorbonne Université, je recherche une alternance en développement backend pour l’année en cours.',
-    'Je m’intéresse particulièrement à la maintenance applicative et au travail sur des bases de données SQL.',
+    'Actuellement en Master 2 Sciences et Technologie du Logiciel à Sorbonne Université, je recherche un stage de fin d’études en développement pour l’année en cours.',
     'Parcours : Licence Informatique à l’Université Grenoble Alpes (2020 – 2024), puis Master 1 Systèmes logiciels et calculs distribués à l’Université Côte d’Azur (2025 – 2026).',
   ],
   experience: [
@@ -25,10 +24,12 @@ export const profile = {
     { title: 'Technicien de proximité', org: 'EDF (via Econocom), Grenoble', date: 'Sept. – Nov. 2024' },
   ],
   skills: {
-    'Maîtrisées': ['Java', 'SQL', 'PostgreSQL', 'Spring / Spring Boot', 'TypeScript', 'Node.js / Express'],
-    'Notions': ['C', 'Python', 'Linux', 'Angular', 'MongoDB', 'Docker', 'Git', 'CI/CD (GitHub Actions)'],
+    'Backend': ['Java', 'Python', 'C', 'Spring / Spring Boot', 'Node.js / Express'],
+    'Frontend': ['TypeScript', 'Angular'],
+    'Bases de données': ['SQL', 'PostgreSQL', 'MongoDB'],
+    'Outils et systèmes': ['Docker', 'Git', 'CI/CD (GitHub Actions)', 'Linux'],
     'Langues': ['Français (natif)', 'Anglais (courant)'],
-    'Soft skills': ['Autonomie', 'Rigueur', 'Communication'],
+    'Qualités': ['Autonomie', 'Rigueur', 'Communication'],
   },
 };
 
@@ -152,14 +153,16 @@ export const projects = [
     tags: ['Linux', 'Bash', 'Python', 'Matplotlib', 'Systèmes de fichiers'],
     short: 'Étude comparative de systèmes de fichiers pour SSD (INRIA / Université Côte d’Azur).',
     description: [
-      'Projet de recherche mené avec l’INRIA et l’Université Côte d’Azur à Sophia Antipolis, sur les systèmes de fichiers adaptés aux SSD.',
-      'Étude comparative de JFFS2, UBIFS, F2FS et VeraCrypt, avec des benchmarks réalisés sous Linux (Kali, VirtualBox).',
+      'Projet de recherche de Master 1 (UCA / INRIA, Sophia Antipolis), encadré par Sid Touati : une étude comparative des systèmes de fichiers conçus pour la mémoire flash, avec ou sans contrôleur FTL.',
+      'Le projet prolonge des travaux antérieurs en intégrant VeraCrypt (chiffrement à la volée), en étudiant l’overhead selon la taille des blocs au formatage et en mesurant le nombre maximal de fichiers et de répertoires.',
     ],
     highlights: [
-      'Automatisation des mesures avec des scripts Bash',
-      'Visualisation des résultats en Python (Matplotlib)',
-      'Rédaction d’un rapport et présentation orale',
+      'Benchmarks pratiques de JFFS2 et UBIFS (flash brute MTD, via block2mtd), de F2FS et de VeraCrypt sous Kali Linux / VirtualBox',
+      'Analyse théorique des systèmes historiques JFFS, YAFFS2 et LogFS',
+      'Résultats : UBIFS surpasse nettement JFFS2 en écriture séquentielle, VeraCrypt ajoute un overhead modéré, F2FS a un overhead de formatage plus élevé',
+      'Mesures automatisées en Bash, graphiques en Python (Matplotlib), rapport de 16 pages et soutenance orale',
     ],
+    doc: { url: 'docs/rapport-ssd-inria.pdf', label: 'Lire le rapport (16 pages)', title: 'Étude comparative des systèmes de fichiers pour SSD' },
     links: [],
   },
   {

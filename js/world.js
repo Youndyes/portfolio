@@ -36,7 +36,7 @@ const PROJECT_SLOTS = [
 const SPECIAL_SLOTS = {
   about: { b: [-9, -27], p: [-4.25, -27], title: 'À propos', style: 'about', color: '#ffd23f' },
   contact: { b: [9, -27], p: [4.25, -27], title: 'Contact', style: 'contact', color: '#38bdf8' },
-  cv: { b: [9, 27], p: [4.25, 27], title: 'CV', style: 'tower', color: '#f472b6' },
+  cv: { b: [9, 27], p: [4.25, 27], title: 'CV', style: 'cv', color: '#f472b6' },
 };
 
 // ------------------------------------------------------------

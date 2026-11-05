@@ -127,7 +127,6 @@ async function init() {
     isTouch,
     onStart: () => {
       document.body.classList.add('playing');
-      if (isTouch) document.getElementById('touch').hidden = false;
     },
     onTeleport: teleport,
     onLeave: () => {
@@ -159,9 +158,13 @@ async function init() {
 
   addEventListener('keydown', (e) => {
     if (ui.handleKey(e)) return;
-    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) e.preventDefault();
+    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(e.code)) e.preventDefault();
     keys.add(e.code);
-    if ((e.code === 'KeyE' || e.code === 'Enter') && activeZone) ui.openZone(activeZone);
+    if ((e.code === 'Space' || e.code === 'Enter' || e.code === 'NumpadEnter') && activeZone) {
+      e.preventDefault();
+      document.activeElement?.blur?.();
+      ui.openZone(activeZone);
+    }
     if (e.code === 'KeyR') { car.reset(SPAWN.x, SPAWN.z, SPAWN.angle); car.lookAhead(camTarget); }
   });
   addEventListener('keyup', (e) => keys.delete(e.code));
@@ -177,6 +180,9 @@ async function init() {
     btn.addEventListener('pointercancel', off);
     btn.addEventListener('contextmenu', (e) => e.preventDefault());
   }
+  // Bouton « Entrer » : grisé tant que la voiture n'est pas sur une dalle
+  const enterBtn = document.getElementById('btn-enter');
+  enterBtn.addEventListener('click', () => { if (activeZone && !ui.blocking) ui.openZone(activeZone); });
 
   // Entrée = direction à l'écran (x vers la droite, y vers le haut)
   const NO_INPUT = { x: 0, y: 0 };
@@ -232,6 +238,11 @@ async function init() {
 
     activeZone = world.zones.find((z) => Math.abs(car.pos.x - z.pad.x) < 1.8 && Math.abs(car.pos.y - z.pad.z) < 1.8) || null;
     ui.setPrompt(ui.blocking ? null : activeZone);
+    const canEnter = !!activeZone && !ui.blocking;
+    if (enterBtn.disabled === canEnter) {
+      enterBtn.disabled = !canEnter;
+      enterBtn.style.setProperty('--accent', activeZone?.color || '#ffd23f');
+    }
     world.update(t, dt, activeZone, smoke);
 
     // Petits nuages de poussière quand on roule

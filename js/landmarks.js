@@ -500,4 +500,46 @@ function sbls() {
   return { group: g, top: 3.4 };
 }
 
-export const LANDMARKS = { joyn, hive, pacman, sampler, twitch, ssd, compression, sbls, about, contact };
+// ---------------------------------------------------------------------------
+//  CV : une feuille de CV en pixel art (coin corné, « CV », photo, lignes)
+// ---------------------------------------------------------------------------
+const CV_SHEET = [
+  '.OOOOOOOOOOOOO....',
+  'OWWWWWWWWWWWWOFO..',
+  'OWWOOOWOWWWOWOFFO.',
+  'OWOWWWWOWWWOWOFFFO',
+  'OWOWWWWOWWWOWOOOOO',
+  'OWOWWWWWOWOWWWWWWO',
+  'OWWOOOWWWOWWWWWWWO',
+  'OWWWWWWWWWWWWWWWWO',
+  'OWWWDDDWWLLLLWWWWO',
+  'OWWDDDDDWWWWWWWWWO',
+  'OWWWDDDWWLLLLLLLWO',
+  'OWWWWWWWWWWWWWWWWO',
+  'OWWDDDDDWLLLLLLLWO',
+  'OWWDDDDDWWWWWWWWWO',
+  'OWWWWWWWWWWWWWWWWO',
+  'OWLLLWLLLLLLLLLLWO',
+  'OWWWWWWWWWWWWWWWWO',
+  'OWLLLWLLLLLLLLLLWO',
+  'OWWWWWWWWWWWWWWWWO',
+  'OWLLLWLLLLLLLLLLWO',
+  'OSWWWWWWWWWWWWWWWO',
+  '.OOOOOOOOOOOOOOOO.',
+];
+function cv(accent) {
+  const g = new THREE.Group();
+  plinth(g, accent);
+  const holder = new THREE.Group();
+  holder.rotation.y = FACE_CAMERA;
+  g.add(holder);
+  // petit pupitre incliné qui tient la feuille
+  holder.add(b(2.6, 0.35, 1.2, '#3b3f4f', 0, 0.48, -0.1));
+  const sheet = sprite(CV_SHEET, { O: '#1b1b22', W: '#f4f1fa', F: '#5a5a66', D: '#5a5a66', L: '#1b1b22', S: '#d9d6e6' }, 0.27, 2);
+  sheet.position.set(0, 0.6, 0);
+  sheet.rotation.x = -0.12;
+  holder.add(sheet);
+  return { group: g, top: 6.8 };
+}
+
+export const LANDMARKS = { joyn, hive, pacman, sampler, twitch, ssd, compression, sbls, about, contact, cv };

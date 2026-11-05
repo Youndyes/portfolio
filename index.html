@@ -33,22 +33,21 @@
 
   <div id="controls-hint" class="card">
     <span><kbd>Z</kbd><kbd>Q</kbd><kbd>S</kbd><kbd>D</kbd> / flèches : se déplacer</span>
-    <span><kbd>E</kbd> entrer</span>
+    <span><kbd>Espace</kbd> / <kbd>Entrée</kbd> entrer</span>
     <span><kbd>R</kbd> respawn</span>
   </div>
 
   <button id="prompt" class="card" hidden></button>
 
-  <!-- Contrôles tactiles -->
-  <div id="touch" hidden>
-    <div class="tgroup">
-      <button data-k="left" aria-label="Gauche">◀</button>
-      <button data-k="right" aria-label="Droite">▶</button>
+  <!-- Contrôles à l'écran (petits écrans et écrans tactiles) -->
+  <div id="touch">
+    <div class="dpad">
+      <button data-k="up" class="u" aria-label="Haut">▲</button>
+      <button data-k="left" class="l" aria-label="Gauche">◀</button>
+      <button data-k="down" class="d" aria-label="Bas">▼</button>
+      <button data-k="right" class="r" aria-label="Droite">▶</button>
     </div>
-    <div class="tgroup">
-      <button data-k="down" aria-label="Frein / marche arrière">▼</button>
-      <button data-k="up" aria-label="Accélérer">▲</button>
-    </div>
+    <button id="btn-enter" class="enter" disabled aria-label="Entrer dans le bâtiment">ENTRER</button>
   </div>
 
   <!-- Panneau (projet, à propos, liste...) -->
