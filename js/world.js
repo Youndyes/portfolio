@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { LANDMARKS } from './landmarks.js';
+import { bakeStatic } from './bake.js';
 
 // ------------------------------------------------------------
 //  Layout de la carte (1 unité = 1 tuile)
@@ -525,6 +526,8 @@ export function buildWorld(scene, profile, projects) {
     }
   }
 
+  const baked = bakeStatic(scene);
+  if (location.hash === '#debug') console.info('[portfolio] objets statiques fusionnés :', baked);
 
   return { obstacles, zones, pickables, labels, update };
 }
