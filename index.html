@@ -8,9 +8,24 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+  <!-- ?v=… : à changer à chaque mise en ligne, pour que le navigateur ne mélange
+       jamais d'anciens et de nouveaux fichiers (GitHub Pages les garde 10 min en cache) -->
+  <link rel="stylesheet" href="css/style.css?v=8">
   <script type="importmap">
-    { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "./js/main.js": "./js/main.js?v=8",
+        "./js/data.js": "./js/data.js?v=8",
+        "./js/world.js": "./js/world.js?v=8",
+        "./js/car.js": "./js/car.js?v=8",
+        "./js/ui.js": "./js/ui.js?v=8",
+        "./js/minimap.js": "./js/minimap.js?v=8",
+        "./js/particles.js": "./js/particles.js?v=8",
+        "./js/landmarks.js": "./js/landmarks.js?v=8",
+        "./js/bake.js": "./js/bake.js?v=8"
+      }
+    }
   </script>
 </head>
 <body>
@@ -27,6 +42,12 @@
       <button class="px-btn" id="btn-list" title="Liste des projets">☰ Projets</button>
       <button class="px-btn" id="btn-help" title="Commandes">?</button>
     </div>
+  </div>
+
+  <!-- Zoom (petits écrans / tactile) -->
+  <div id="zoom">
+    <button class="px-btn" id="btn-zoom-in" aria-label="Zoomer">+</button>
+    <button class="px-btn" id="btn-zoom-out" aria-label="Dézoomer">-</button>
   </div>
 
   <canvas id="minimap" width="132" height="132" aria-hidden="true"></canvas>
@@ -66,6 +87,6 @@
     <p style="padding:2rem;font-family:sans-serif">Ce portfolio a besoin de JavaScript et de WebGL.</p>
   </noscript>
 
-  <script type="module" src="js/main.js"></script>
+  <script type="module">import './js/main.js';</script>
 </body>
 </html>

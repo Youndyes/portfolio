@@ -170,7 +170,10 @@ async function init() {
   addEventListener('blur', () => keys.clear());
 
   // Joystick : toutes les directions, l'inclinaison règle la vitesse
+  // (garde-fou : sans joystick dans la page, le reste du site fonctionne quand même)
   const stick = document.getElementById('stick');
+  if (stick) setupStick(stick);
+  function setupStick(stick) {
   const knob = stick.querySelector('.knob');
   let stickId = null;
   const moveStick = (e) => {
@@ -203,8 +206,9 @@ async function init() {
   stick.addEventListener('pointerup', (e) => { if (e.pointerId === stickId) releaseStick(); });
   stick.addEventListener('pointercancel', releaseStick);
   stick.addEventListener('contextmenu', (e) => e.preventDefault());
+  }
   // Bouton « Entrer » : grisé tant que la voiture n'est pas sur une dalle
-  const enterBtn = document.getElementById('btn-enter');
+  const enterBtn = document.getElementById('btn-enter') || document.createElement('button');
   enterBtn.addEventListener('click', () => { if (activeZone && !ui.blocking) ui.openZone(activeZone); });
 
   // Entrée = direction à l'écran (x vers la droite, y vers le haut)
@@ -218,6 +222,12 @@ async function init() {
     const right = k('KeyD', 'ArrowRight');
     return { x: (right ? 1 : 0) - (left ? 1 : 0), y: (up ? 1 : 0) - (down ? 1 : 0) };
   }
+
+  // Boutons + / − (mobile) : plage plus resserrée pour que la scène reste lisible
+  const ZOOM_MIN = 14, ZOOM_MAX = 30;
+  const zoomBy = (f) => { zoomTarget = THREE.MathUtils.clamp(zoomTarget * f, ZOOM_MIN, ZOOM_MAX); };
+  document.getElementById('btn-zoom-in')?.addEventListener('click', () => zoomBy(1 / 1.2));
+  document.getElementById('btn-zoom-out')?.addEventListener('click', () => zoomBy(1.2));
 
   addEventListener('wheel', (e) => {
     if (ui.blocking) return;

@@ -132,6 +132,22 @@ kbd {
 .hud-role { color: var(--mute); font-size: 20px; }
 .hud-actions { display: flex; gap: 8px; }
 
+#zoom {
+  position: fixed;
+  right: 16px;
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 4;
+}
+#zoom .px-btn {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  font-size: 18px;
+  touch-action: manipulation;
+}
+
 #minimap {
   position: fixed;
   right: 16px;
@@ -437,7 +453,11 @@ kbd {
   .only-desktop { display: none !important; }
   .only-compact { display: initial; }
   div.only-compact { display: block; }
-  #minimap { width: 112px; height: 112px; top: 92px; bottom: auto; right: 16px; }
+  /* + / − sous le bouton « ? », mini-carte en dessous */
+  #zoom { top: 72px; opacity: 0; transition: opacity 0.4s; }
+  #zoom .px-btn { width: 40px; }
+  .playing #zoom { display: flex; opacity: 1; }
+  #minimap { width: 112px; height: 112px; top: 176px; bottom: auto; right: 16px; }
   #prompt { bottom: 158px; font-size: 20px; width: max-content; max-width: calc(100vw - 32px); padding: 8px 12px; }
   #prompt .key { display: none; }
   .hud-role { font-size: 17px; }

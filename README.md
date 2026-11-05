@@ -43,6 +43,11 @@ Le dossier `Projets/` (sources brutes) est exclu du dépôt par `.gitignore`.
 
 Le site étant statique, il fonctionne aussi tel quel sur Netlify, Vercel ou Cloudflare Pages.
 
+**À chaque mise en ligne**, incrémentez le numéro `?v=…` dans `index.html`
+(feuille de style + importmap). GitHub Pages fait garder les fichiers 10 minutes
+en cache : sans ce numéro, un visiteur peut recevoir un mélange d'anciens et de
+nouveaux fichiers, et le site plante.
+
 ## Structure
 
 | Fichier | Rôle |
