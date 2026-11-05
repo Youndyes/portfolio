@@ -110,7 +110,6 @@ async function init() {
   }
 
   const camTarget = new THREE.Vector3();
-  const lookVel = new THREE.Vector2();
   const look = new THREE.Vector3();
   car.lookAhead(camTarget);
 
@@ -229,7 +228,8 @@ async function init() {
   let last = performance.now(), t = 0, dustTimer = 0;
   function frame(now) {
     requestAnimationFrame(frame);
-    const dt = Math.min(0.05, (now - last) / 1000);
+    // la première image peut avoir un horodatage antérieur à `last` : jamais de dt négatif
+    const dt = Math.min(0.05, Math.max(0, (now - last) / 1000));
     last = now;
     t += dt;
 
@@ -261,11 +261,10 @@ async function init() {
       zoom += (zoomTarget - zoom) * (1 - Math.exp(-8 * dt));
       updateFrustum();
     }
-    // Anticipation lissée : la vitesse « vue » par la caméra varie doucement,
-    // pour éviter le recul brusque quand la voiture s'arrête net.
-    lookVel.lerp(car.vel, 1 - Math.exp(-2.5 * dt));
-    look.set(car.pos.x + lookVel.x * 0.3, 0, car.pos.y + lookVel.y * 0.3);
-    camTarget.lerp(look, 1 - Math.exp(-5 * dt));
+    // La caméra suit simplement la voiture, sans anticipation : aucun
+    // dépassement ni retour en arrière quand la voiture s'arrête.
+    look.set(car.pos.x, 0, car.pos.y);
+    camTarget.lerp(look, 1 - Math.exp(-8 * dt));
     const pos = camTarget.clone().addScaledVector(CAM_DIR, 120);
     const px = zoom / bh;
     const r = pos.dot(CAM_RIGHT), u = pos.dot(CAM_UP);
