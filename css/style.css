@@ -141,12 +141,25 @@ kbd {
   z-index: 4;
 }
 #zoom .px-btn {
+  position: relative;
   width: 44px;
   height: 44px;
   padding: 0;
-  font-size: 18px;
   touch-action: manipulation;
 }
+/* + et − dessinés en CSS : parfaitement centrés, quelle que soit la police */
+.zoom-btn::before,
+.zoom-btn.plus::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 16px;
+  height: 4px;
+  margin: -2px 0 0 -8px;
+  background: currentColor;
+}
+.zoom-btn.plus::after { width: 4px; height: 16px; margin: -8px 0 0 -2px; }
 
 #minimap {
   position: fixed;

@@ -183,9 +183,9 @@ async function init() {
     const len = Math.hypot(dx, dy);
     if (len > max) { dx *= max / len; dy *= max / len; }
     knob.style.transform = `translate(${dx}px, ${dy}px)`;
-    const m = Math.min(1, len / max);
-    // petite zone morte au centre, puis réponse progressive
-    const s = m < 0.15 ? 0 : (m - 0.15) / 0.85;
+    // le joystick ne donne que la direction : hors de la petite zone morte
+    // centrale, la voiture roule toujours à pleine vitesse (comme au clavier)
+    const s = len / max < 0.2 ? 0 : 1;
     touch.x = len ? (dx / len) * s : 0;
     touch.y = len ? (-dy / len) * s : 0;
   };

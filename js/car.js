@@ -120,9 +120,7 @@ export class Car {
       this.angle += step;
       turn = THREE.MathUtils.clamp(diff * 2, -1, 1);
       // on ralentit un peu pendant les demi-tours pour ne pas faire de grands arcs
-      // joystick : l'inclinaison règle la vitesse (clavier = toujours à fond)
-      const strength = Math.min(1, Math.hypot(input.x, input.y));
-      const target = SPEED * strength * Math.max(0.25, Math.cos(diff));
+      const target = SPEED * Math.max(0.25, Math.cos(diff));
       vf += THREE.MathUtils.clamp(target - vf, -ACCEL * dt, ACCEL * dt);
     } else {
       vf *= Math.exp(-STOP * dt);
