@@ -9,13 +9,13 @@ export const profile = {
   name: 'Younes Bensallah',
   role: 'Étudiant en M2 Sciences et Technologie du Logiciel',
   school: 'Sorbonne Université',
-  status: 'À la recherche d’un stage de fin d’études en développement logiciel',
+  status: 'À la recherche d’une alternance en développement logiciel',
   email: 'younes3138@gmail.com',
   github: GITHUB,
   linkedin: 'https://linkedin.com/in/younes-bensallah',
   cv: 'cv.pdf',
   about: [
-    'Actuellement en Master 2 Sciences et Technologie du Logiciel à Sorbonne Université, je recherche un stage de fin d’études en développement pour l’année en cours.',
+    'Actuellement en Master 2 Sciences et Technologie du Logiciel à Sorbonne Université, je recherche une alternance en développement logiciel pour l’année en cours.',
     'Parcours : Licence Informatique à l’Université Grenoble Alpes (2020 – 2024), puis Master 1 Systèmes logiciels et calculs distribués à l’Université Côte d’Azur (2025 – 2026).',
   ],
   experience: [

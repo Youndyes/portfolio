@@ -1,8 +1,8 @@
 # Portfolio de Younes Bensallah
 
-**▶ Visiter le site : https://youndyes.github.io/portfolio/**
+**Visiter le site : https://youndyes.github.io/portfolio/**
 
-Étudiant en M2 Sciences et Technologie du Logiciel à Sorbonne Université, je recherche un **stage de fin d'études en développement logiciel**.
+Étudiant en M2 Sciences et Technologie du Logiciel à Sorbonne Université, je recherche une **alternance en développement logiciel**.
 
 Plutôt qu'un CV de plus, j'ai voulu un portfolio qu'on explore : on conduit une petite voiture sur une île en vue isométrique, en pixel art. Chaque monument représente un de mes projets. Il suffit de s'arrêter devant pour le découvrir et, souvent, l'essayer directement dans le navigateur.
 
