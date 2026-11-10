@@ -161,8 +161,8 @@ function tick() {
     lastAiMs = performance.now() - t0;
   }
   step(state);
-  if (state.lives <= 0) end('Perdu !', `Score final : ${state.score}`);
-  else if (state.levelCleared) end('Niveau terminé !', `Score final : ${state.score}`);
+  if (state.lives <= 0) end('Partie perdue', `Score : ${state.score}`);
+  else if (state.levelCleared) end('Niveau terminé', `Score : ${state.score}`);
 }
 
 function end(title, text) {
@@ -190,13 +190,9 @@ function loop(now) {
 function hud() {
   $('score').textContent = state.score;
   $('lives').textContent = '●'.repeat(Math.max(0, state.lives)) || '—';
-  $('mode-label').textContent = mode === 'ai' ? 'MODE : IA MINIMAX' : 'MODE : JOUEUR';
-  const ghostStates = ['maison', 'sortie', 'chasse'];
-  $('stats').innerHTML =
-    `Tick <b>${state.tick}</b> · graine <b>${seed}</b><br>` +
-    (mode === 'ai' ? `Décision IA : <b>${lastAiMs.toFixed(1)} ms</b>, <b>${bot.nodes}</b> nœuds<br>` : '') +
-    (state.frightened ? `Fantômes effrayés : <b>${state.frightenedEndTick - state.tick}</b> ticks<br>` : '') +
-    state.ghosts.map((g, i) => `${GHOST_NAMES[i]} : <b>${ghostStates[g.state]}</b> (${g.useAStar ? 'A*' : 'glouton'})`).join('<br>');
+  $('stats').innerHTML = mode === 'ai'
+    ? `Décision de l’IA : <b>${lastAiMs.toFixed(1)} ms</b> (${bot.nodes} nœuds)`
+    : '';
 }
 
 // ------------------------------------------------------------------
@@ -207,7 +203,7 @@ function start(m) {
   if (!running) newGame(false);
   running = true;
   paused = false;
-  $('pause').textContent = '⏸ Pause';
+  $('pause').textContent = 'Pause';
   $('overlay').hidden = true;
 }
 function setMode(m) {
@@ -224,7 +220,7 @@ $('new-maze').onclick = () => { newGame(true); running = false; start(mode); };
 $('pause').onclick = () => {
   if (!running) return;
   paused = !paused;
-  $('pause').textContent = paused ? '▶ Reprendre' : '⏸ Pause';
+  $('pause').textContent = paused ? 'Reprendre' : 'Pause';
 };
 for (const b of document.querySelectorAll('[data-speed]')) {
   b.onclick = () => {

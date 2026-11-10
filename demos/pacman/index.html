@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-  <title>Pac-Man IA — TER</title>
+  <title>Pac-Man IA</title>
   <link rel="stylesheet" href="../demo.css">
   <style>
     main { padding: 64px 16px 24px; max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 20px; align-items: start; }
@@ -37,26 +37,24 @@
 <body>
   <header class="demo-bar">
     <a href="../../" class="back">← Portfolio</a>
-    <span class="title">Pac-Man IA — TER (Java → JavaScript)</span>
-    <span class="note">Même logique que le projet Java, portée pour le navigateur</span>
+    <span class="title">Pac-Man IA</span>
   </header>
 
   <main>
     <section>
       <div class="hud">
-        <span>SCORE <b id="score">0</b></span>
+        <span>Score <b id="score">0</b></span>
         <span class="lives" id="lives">●●●</span>
-        <span id="mode-label">MODE : JOUEUR</span>
       </div>
       <div class="stage" id="stage">
         <canvas id="game"></canvas>
         <div class="overlay" id="overlay">
           <div>
-            <h2 id="ov-title">Prêt ?</h2>
-            <p id="ov-text">Flèches ou ZQSD pour jouer — ou laissez l’IA Minimax jouer.</p>
+            <h2 id="ov-title">Pac-Man</h2>
+            <p id="ov-text">Flèches ou ZQSD pour jouer.</p>
             <div class="seg" style="justify-content:center">
-              <button class="btn primary" id="ov-play">▶ Jouer</button>
-              <button class="btn" id="ov-ai">🤖 Regarder l’IA</button>
+              <button class="btn primary" id="ov-play">Jouer</button>
+              <button class="btn" id="ov-ai">Voir l’IA jouer</button>
             </div>
           </div>
         </div>
@@ -69,21 +67,21 @@
 
     <aside>
       <div>
-        <h3>Qui joue ?</h3>
+        <h3>Mode</h3>
         <div class="seg">
-          <button class="btn on" id="m-player">🎮 Moi</button>
-          <button class="btn" id="m-ai">🤖 IA Minimax</button>
+          <button class="btn on" id="m-player">Joueur</button>
+          <button class="btn" id="m-ai">IA</button>
         </div>
       </div>
       <div>
-        <h3>IA des fantômes</h3>
+        <h3>Fantômes</h3>
         <div id="ghost-config"></div>
       </div>
       <div>
         <h3>Partie</h3>
         <div class="seg">
-          <button class="btn" id="new-maze">🔀 Nouveau labyrinthe</button>
-          <button class="btn" id="pause">⏸ Pause</button>
+          <button class="btn" id="new-maze">Nouveau labyrinthe</button>
+          <button class="btn" id="pause">Pause</button>
         </div>
         <div class="seg" style="margin-top:6px">
           <button class="btn on" data-speed="1">x1</button>
@@ -93,11 +91,11 @@
       </div>
       <div class="stats" id="stats"></div>
       <div class="about">
-        <h3>Sous le capot</h3>
-        <p><b>Labyrinthe</b> : Kruskal modifié pour une symétrie horizontale parfaite, puis suppression des culs-de-sac pour créer des boucles. Chaque clic sur « Nouveau labyrinthe » en génère un différent.</p>
-        <p><b>IA Pac-Man</b> : Minimax avec élagage alpha-bêta sur un horizon de 4 coups, avec une fonction d’évaluation (score, distance aux pastilles, danger des fantômes) et des sécurités anti-boucle.</p>
-        <p><b>Fantômes</b> : A* (chemin optimal) ou glouton, avec les comportements propres à chaque fantôme.</p>
-        <p>Projet d’origine en Java 21 / Maven, avec une API Spring Boot, MongoDB, des benchmarks et une CI GitHub Actions.</p>
+        <h3>Fonctionnement</h3>
+        <p>Labyrinthe généré par un algorithme de Kruskal symétrique.</p>
+        <p>Pac-Man : Minimax avec élagage alpha-bêta, profondeur 4.</p>
+        <p>Fantômes : A* ou recherche gloutonne.</p>
+        <p>Portage JavaScript d’un projet Java réalisé en TER.</p>
       </div>
     </aside>
   </main>
